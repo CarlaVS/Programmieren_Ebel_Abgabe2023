@@ -1,1 +1,8 @@
 # Programmieren_Ebel_Abgabe2023
+## Problem
+Grafiken werden mit Passepartout gerahmt. Für eine ansprechende Präsentation werden sie dazu in Gruppen (Konvolut) eingeteilt, die in Rahmen derselben Größe präsentiert werden. Die Grafiken werden also in Gruppen eingeteilt, in denen die Abweichung der Dimensionen in Höhe und Breite nicht mehr als einen definierten Abstand haben darf (2 cm in unserem Beispiel). Anschließend werden für jede Grafik in jeder Gruppe individuell die Werte für die Innenmaße des Passepartout berechnet. Die Außenmaße des Passepartout werden für jede Gruppe abhängig von der maximalen Höhe und Breite berechnet.
+Für das Passepartout wird ein Innenmaß (Maß der Graphik + 2 cm in unserem Fall) und ein Außenmaß berechnet (maximale Dimensionen der Gruppe + 6 bzw 7 cm, abhängig von der Größe der Graphiken).
+
+## Lösung
+Zunächst wird der Grenzwert von Graphiken festgelegt um die großen von kleinen Graphiken zu unterscheiden (in diesem Fall 40 cm). Dann wird der maximale Abweichungswert in cm definiert (in diesem Fall 2 cm). Die Tabelle der Grafiken wird eingelesen und für jede Grafik wird ein Python Objekt der Klasse G_object generiert. Den Grafiken wird für das Attribut small ein boolescher Wert zugewiesen, je nachdem ob sie ein Maß von über 40 cm haben.
+Die Liste der Objekte wird randomisiert neu geordnet. Um alle theoretisch möglichen Permutationen der Liste zu ermitteln wäre zum Beispiel die Funktion permutations aus der Library itertools hilfreich. Der vorliegende Code beschränkt sich auf 5000 randomisierte Listen. Im Testdurchlauf wurden so sehr gute Ergebnisse erzeilt.
