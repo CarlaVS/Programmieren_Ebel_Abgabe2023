@@ -15,7 +15,7 @@ class G_object():
 
 class G_individual():
     # create objects to represent the graphics with inventory object number, title, height, width, assignment to size group small, color for depiction  in GUI, group number and size of passepartout
-    def __init__(self, nr, title, height, width, small, color, outer_h, outer_w):
+    def __init__(self, nr, title, height, width, small, color, outer_h, outer_w, outer_fr_h, outer_fr_w):
         self.nr = nr
         self.title = title
         self.height = float(height)
@@ -23,10 +23,16 @@ class G_individual():
         self.small = small
         self.color = str(color)
         self.gr = 0
-        self.pp_inner_h = float(height) + 2
-        self.pp_inner_w = float(width) + 2
+        self.pp_inner_h = float(height) + 0.8
+        #Fenstermaß Höhe
+        self.pp_inner_w = float(width) + 0.8
+        #Fenstermaß Breite
         self.pp_outer_h = float(outer_h)
         self.pp_outer_w = float(outer_w)
+        self.frame_inner_h = float(outer_h)
+        self.frame_inner_w = float(outer_w)
+        self.frame_outer_h = float(outer_fr_h)
+        self.frame_outer_w = float(outer_fr_w)
 
 
 def create_objects(grouping_t):
@@ -67,26 +73,26 @@ def randomize_lists(l):
 def get_result(shuffled_lists, precision, output):
     for l in shuffled_lists:
         # find possible combinations of graphics by comparing their heights and widths in the shuffled lists
-        ergebnis = []
-        ergebnis.append(l[0])
+        ind_objects = []
+        ind_objects.append(l[0])
         startH = l[0].height
         startW = l[0].width
         for gr in l:
-            if gr in ergebnis:
+            if gr in ind_objects:
                 pass
             elif (startH < gr.height < (startH + precision)):
                 if (startW < gr.width < (startW + precision)):
-                    ergebnis.append(gr)
+                    ind_objects.append(gr)
                     # appends result if the height and width of the graphic is in the defined range (precision)
                 else:
                     pass
             else:
                 pass
-        if len(ergebnis)>1:
+        if len(ind_objects)>1:
             # turn result into set and add it to the final results if it's not already included
-            ergebnis = set(ergebnis)
-            if ergebnis not in output:
-                output.append(ergebnis)
+            ind_objects = set(ind_objects)
+            if ind_objects not in output:
+                output.append(ind_objects)
     return output
 
 def clear_result(res):
@@ -124,11 +130,11 @@ def pp_details(groups):
         maxwidth = max(g.width for g in group)
         for g in group:
             if g.small == True:
-                g_new = G_individual(g.nr, g.title, g.height, g.width, g.small, g.color, maxheight + 8, maxwidth + 8)
+                g_new = G_individual(g.nr, g.title, g.height, g.width, g.small, g.color, maxheight + 12.8, maxwidth + 12.8, maxheight+14.8, maxwidth+14.8)
                 # create new objects with passepartout dimensions
                 new_group.append(g_new)
             else:
-                g_new = G_individual(g.nr, g.title, g.height, g.width, g.small, g.color, maxheight + 9, maxwidth + 9)
+                g_new = G_individual(g.nr, g.title, g.height, g.width, g.small, g.color, maxheight + 14.8, maxwidth + 14.8, maxheight+16.8, maxwidth+16.8)
                 # create new objects with passepartout dimensions
                 new_group.append(g_new)
         new_groups.append(new_group)
@@ -138,6 +144,7 @@ def pp_details(groups):
 def create_gui(result):
     window = tk.Tk()
     # Create tkinter window
+    window.geometry("600x600")
     window.configure(bg='#e1e7fa')
     # configure colour for window
     columncount = max(len(r)for r in result)
@@ -162,7 +169,7 @@ def create_gui(result):
                 tk.Label(borderwidth=2, relief='solid', bg='#7593f0', text=f"""Mögliche Gruppe {i+1}: \n Passepartout 7 cm""").grid(row=i+1, column=0, padx=5, pady=1)
                 # create label for big group result (> grouping threshold)
         for j, gr in enumerate(grgroup):
-            tk.Label(borderwidth=1, relief='solid', bg=gr.color, text=f"""{gr.title} \n {gr.height} x {gr.width} cm \n PP Höhe innen: {gr.pp_inner_h} cm PP Breite innen: {gr.pp_inner_w} cm \n PP Höhe außen: {gr.pp_outer_h} cm PP Breite außen: {gr.pp_outer_w} cm """).grid(row=i+1, column=j+1, padx=10, pady=10)
+            tk.Label(borderwidth=1, relief='solid', bg=gr.color, text=f"""{gr.title} \n {gr.height} x {gr.width} cm \n PP Höhe innen: {round(gr.pp_inner_h, 1)} cm PP Breite innen: {round(gr.pp_inner_w, 1)} cm \n PP Höhe außen: {round(gr.pp_outer_h, 1)} cm PP Breite außen: {round(gr.pp_outer_w, 1)} cm \n Rahmenhöhe innen: {round(gr.frame_inner_h, 1)} cm Rahmenbreite innen: {round(gr.frame_inner_w, 1)} cm \n Rahmenhöhe außen: {round(gr.frame_outer_h, 1)} cm Rahmenbreite außen: {round(gr.frame_outer_w, 1)} cm """).grid(row=i+1, column=j+1, padx=10, pady=10)
             # add detailed information for every graphic with detailed Passepartout size
     window.mainloop()
     # run tkinter application
@@ -188,6 +195,3 @@ if __name__ == "__main__":
     # creates object to represent the specific passepartout for this graphic in the group
     window = create_gui(result)
     # create visual representation of results
-
-
-# Problem: Klasse g_individual wird nicht erstellt
